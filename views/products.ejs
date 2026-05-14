@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý trà sữa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🧋 Quản lý sản phẩm</h2>
+        <div>
+            Xin chào <b><%= user.Username %></b> (<%= user.Role %>)
+            <a href="/products/logout" class="btn btn-danger btn-sm ms-2">Đăng xuất</a>
+        </div>
+    </div>
+ <!-- 🔥 THÔNG BÁO -->
+    <% if (message) { %>
+        <div class="alert alert-success shadow">
+            <%= message %>
+        </div>
+    <% } %>
+    <!-- 🎯 KHU HÓA ĐƠN -->
+    <div class="mb-4">
+
+        <!-- TẠO HÓA ĐƠN -->
+        <form method="POST" action="/orders/create" style="display:inline;">
+    
+    <!-- chọn khách -->
+    <select name="MaKH" class="form-select d-inline w-auto">
+        <option value="1">Khách lẻ</option>
+        <option value="2">Khách 2</option>
+        <option value="3">Khách 3</option>
+        <option value="4">Khách 4</option>
+        <option value="5">Khách 5</option>
+        <option value="6">Khách 6</option>
+        <option value="7">Khách 7</option>
+        <option value="8">Khách 8</option>
+        <option value="9">Khách 9</option>
+        <option value="10">Khách 10</option>
+
+    </select>
+
+    <button class="btn btn-primary ms-2">
+        🧾 Tạo hóa đơn
+    </button>
+</form>
+        <!-- XEM HÓA ĐƠN -->
+        <a href="/orders/view" class="btn btn-success ms-2">
+            👀 Xem hóa đơn
+        </a>
+
+    </div>
+
+    <!-- FORM THÊM SẢN PHẨM -->
+    <% if (user.Role === 'Admin') { %>
+    <div class="card p-3 mb-4">
+        <h5>➕ Thêm sản phẩm</h5>
+        <form method="POST" action="/products/add" class="row g-2">
+            <div class="col-md-4">
+                <input name="TenSP" class="form-control" placeholder="Tên sản phẩm">
+            </div>
+            <div class="col-md-3">
+                <input name="DonGia" class="form-control" placeholder="Giá">
+            </div>
+            <div class="col-md-3">
+                <input name="MaDM" class="form-control" placeholder="Mã danh mục">
+            </div>
+            <div class="col-md-4">
+             <input name="HinhAnh"
+             class="form-control"
+            placeholder="Link hình ảnh">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">Thêm</button>
+            </div>
+        </form>
+    </div>
+    <% } %>
+
+    <!-- DANH SÁCH SẢN PHẨM -->
+    <div class="row">
+        <% products.forEach(p => { %>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+
+                <!-- HÌNH -->
+                <img src="<%= p.HinhAnh %>" class="card-img-top" style="height:200px; object-fit:cover;">
+
+                <div class="card-body">
+                    <h5 class="card-title"><%= p.TenSP %></h5>
+                    <p class="text-danger fw-bold"><%= p.DonGia %> VNĐ</p>
+
+                    <!-- 🔥 THÊM VÀO HÓA ĐƠN -->
+                    <a href="/orders/add/<%= p.MaSP %>" 
+                       class="btn btn-warning btn-sm">
+                       ➕ Thêm
+                    </a>
+                    <!-- SỬA -->
+                    <% if (user.Role === 'Admin') { %>
+
+                    <a href="/products/edit/<%= p.MaSP %>" 
+                     class="btn btn-primary btn-sm">
+                    ✏️ Sửa
+                    </a>
+
+<% } %>
+</a>
+
+                    <!-- XÓA (ADMIN) -->
+                    <% if (user.Role === 'Admin') { %>
+                        <a href="/products/delete/<%= p.MaSP %>" 
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Xóa sản phẩm?')">
+                           Xóa
+                        </a>
+                    <% } %>
+
+                </div>
+
+            </div>
+        </div>
+        <% }) %>
+    </div>
+
+</div>
+
+</body>
+</html>

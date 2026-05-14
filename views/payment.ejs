@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thanh toán hóa đơn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+
+    <div class="card shadow p-4">
+       
+        <h2 class="text-center mb-4">
+            🧾 HÓA ĐƠN THANH TOÁN
+        </h2>
+        
+            <p><b>Mã hóa đơn:</b> <%= hoadon.MaHD %></p>
+
+            <p><b>Khách hàng:</b> <%= hoadon.TenKhachHang %></p>
+
+            <p><b>SĐT:</b> <%= hoadon.SDTKhachHang %></p>
+
+            <p><b>Nhân viên:</b> <%= hoadon.TenNhanVien %></p>
+
+            <p>
+                <b>Ngày lập:</b> 
+                <%= new Date(hoadon.NgayLap).toLocaleString('vi-VN') %>
+            </p>
+
+
+        <table class="table table-bordered mt-4">
+
+            <tr>
+                <th>Tên món</th>
+                <th>SL</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+
+            <% let tong = 0; %>
+
+            <% chitiet.forEach(ct => { %>
+
+            <tr>
+                <td><%= ct.TenSP %></td>
+                <td><%= ct.SoLuong %></td>
+                <td><%= ct.DonGia %></td>
+                <td><%= ct.SoLuong * ct.DonGia %></td>
+            </tr>
+
+            <% tong += ct.SoLuong * ct.DonGia; %>
+
+            <% }) %>
+
+        </table>
+
+        <h3 class="text-end text-danger">
+            Tổng tiền: <%= tong %> đ
+        </h3>
+
+        <form method="POST" action="/orders/confirm-payment">
+
+    <button class="btn btn-success w-100 mt-3">
+        ✅ Xác nhận đã thanh toán
+    </button>
+    <a href="/orders/<%= hoadon.MaHD %>" 
+        class="btn btn-secondary w-100 mb-2">
+        ⬅ Quay lại hóa đơn
+    </a>
+</form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
